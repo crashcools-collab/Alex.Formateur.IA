@@ -1108,6 +1108,22 @@ function toggleMod(idx) {
   ml.classList.toggle('col');
 }
 
+// ════════════════════════════════════════════════════
+// PARAMS MODAL (utilisé sur toutes les pages)
+// ════════════════════════════════════════════════════
+function openParams() {
+  P = getP();
+  loadParamsIntoForm();
+  updateConnBadges();
+  const m = document.getElementById('paramsMod');
+  if (m) m.classList.add('on');
+}
+
+function closeParams() {
+  const m = document.getElementById('paramsMod');
+  if (m) m.classList.remove('on');
+}
+
 </script>
 <script>
 // ── CURRICULUM SOFTR ──
@@ -1341,5 +1357,57 @@ window.addEventListener('load', () => {
   }, 500);
 });
 </script>
+
+<!-- MODAL PARAMS — présent sur toutes les pages -->
+<div class="movl" id="paramsMod" onclick="if(event.target===this)closeParams()">
+  <div class="modal" style="width:540px;max-height:88vh;overflow-y:auto">
+    <div class="mhd"><h3>⚙️ Paramètres & APIs</h3><button class="mclose" onclick="closeParams()">✕</button></div>
+    <div class="ps"><div class="ps-title">📡 Connexions</div>
+      <div class="conn-row"><div class="cr-logo">🤖</div><div class="cr-info"><div class="cr-name">Claude</div><div class="cr-sub">Chatbot + génération leçons — REQUIS</div></div><span class="cr-badge nok" id="ci-claude">Non configuré</span></div>
+      <div class="conn-row"><div class="cr-logo">🧠</div><div class="cr-info"><div class="cr-name">OpenAI</div><div class="cr-sub">Agents IA avancés</div></div><span class="cr-badge nok" id="ci-openai">Non configuré</span></div>
+      <div class="conn-row"><div class="cr-logo">⚙️</div><div class="cr-info"><div class="cr-name">Make</div><div class="cr-sub">Accès à tes scénarios</div></div><span class="cr-badge nok" id="ci-make">Non configuré</span></div>
+      <div class="conn-row"><div class="cr-logo">🗄️</div><div class="cr-info"><div class="cr-name">Airtable</div><div class="cr-sub">Accès à tes bases</div></div><span class="cr-badge nok" id="ci-at">Non configuré</span></div>
+    </div>
+    <div class="ps"><div class="ps-title">🤖 Claude</div>
+      <div class="pr"><label>Clé API Claude</label>
+        <div class="pw"><input type="password" id="p-claude" placeholder="sk-ant-api03-..."><button class="eye" onclick="tEye('p-claude')">👁</button></div>
+        <div class="p-desc">console.anthropic.com → API Keys</div>
+        <div style="display:flex;gap:6px;margin-top:6px">
+          <button class="p-test" onclick="testClaude()">⚡ Tester</button>
+          <button class="p-test" style="background:var(--accent);color:#fff;border-color:var(--accent)" onclick="saveKey('claude','p-claude','Clé Claude')">💾 Sauver</button>
+        </div>
+        <div class="p-res" id="pr-claude"></div>
+      </div>
+      <div class="pr"><label>Modèle</label><div class="pw"><select id="p-cm"><option value="claude-sonnet-4-6">Sonnet 4 (recommandé)</option><option value="claude-haiku-4-5-20251001">Haiku 4.5 (rapide)</option><option value="claude-opus-4-6">Opus 4 (puissant)</option></select></div></div>
+    </div>
+    <div class="ps"><div class="ps-title">🧠 OpenAI (optionnel)</div>
+      <div class="pr"><label>Clé API OpenAI</label>
+        <div class="pw"><input type="password" id="p-openai" placeholder="sk-proj-..."><button class="eye" onclick="tEye('p-openai')">👁</button></div>
+        <div style="display:flex;gap:6px;margin-top:6px">
+          <button class="p-test" onclick="testOpenAI()">⚡ Tester</button>
+          <button class="p-test" style="background:var(--accent);color:#fff;border-color:var(--accent)" onclick="saveKey('openai','p-openai','Clé OpenAI')">💾 Sauver</button>
+        </div>
+        <div class="p-res" id="pr-openai"></div>
+      </div>
+    </div>
+    <div class="ps"><div class="ps-title">🗄️ Airtable (optionnel)</div>
+      <div class="pr"><label>Personal Access Token</label>
+        <div class="pw"><input type="password" id="p-at" placeholder="patXXXXX..."><button class="eye" onclick="tEye('p-at')">👁</button></div>
+        <div style="display:flex;gap:6px;margin-top:6px">
+          <button class="p-test" onclick="testAirtable()">⚡ Tester</button>
+          <button class="p-test" style="background:var(--accent);color:#fff;border-color:var(--accent)" onclick="saveKey('at','p-at','Token Airtable')">💾 Sauver</button>
+        </div>
+        <div class="p-res" id="pr-at"></div>
+      </div>
+    </div>
+    <div class="ps"><div class="ps-title">🎮 Préférences</div>
+      <div class="pr"><label>Prénom</label><div class="pw"><input type="text" id="p-name" placeholder="Pour personnaliser les leçons"></div></div>
+      <div class="pr"><label>Niveau</label><div class="pw"><select id="p-lvl"><option value="zero">Zéro (jamais utilisé)</option><option value="deb">Débutant</option><option value="inter">Intermédiaire</option></select></div></div>
+    </div>
+    <button class="save-all" onclick="saveParams()">💾 Enregistrer les préférences</button>
+    <div style="margin-top:12px;text-align:center"><a href="diagnostic.html" style="color:var(--muted);font-size:11px;text-decoration:none">🔧 Page diagnostic si problème de clés</a></div>
+  </div>
+</div>
+
 </body>
 </html>
