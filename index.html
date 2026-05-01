@@ -515,23 +515,40 @@ body{min-height:100vh;display:flex;flex-direction:column;overflow:auto;}
       <div class="conn-row"><div class="cr-logo">🎨</div><div class="cr-info"><div class="cr-name">Softr</div><div class="cr-sub">Accès à tes apps</div></div><span class="cr-badge nok" id="ci-sf">Non configuré</span></div>
     </div>
     <div class="ps"><div class="ps-title">🤖 Claude</div>
-      <div class="pr"><label>Clé API Claude</label><div class="pw"><input type="password" id="p-claude" placeholder="sk-ant-api03-..."><button class="eye" onclick="tEye('p-claude')">👁</button></div><div class="p-desc">console.anthropic.com → API Keys</div><button class="p-test" onclick="testClaude()">⚡ Tester</button><div class="p-res" id="pr-claude"></div></div>
-      <div class="pr"><label>Modèle</label><div class="pw"><select id="p-cm"><option value="claude-sonnet-4-20250514">Sonnet 4 (recommandé)</option><option value="claude-haiku-4-5-20251001">Haiku 4.5 (rapide)</option><option value="claude-opus-4-6">Opus 4 (puissant)</option></select></div></div>
+      <div class="pr"><label>Clé API Claude</label><div class="pw"><input type="password" id="p-claude" placeholder="sk-ant-api03-..."><button class="eye" onclick="tEye('p-claude')">👁</button></div><div class="p-desc">console.anthropic.com → API Keys</div>
+      <div style="display:flex;gap:6px;margin-top:6px">
+        <button class="p-test" onclick="testClaude()">⚡ Tester</button>
+        <button class="p-test" style="background:var(--accent);color:#fff;border-color:var(--accent)" onclick="saveKey('claude','p-claude','Clé Claude')">💾 Sauver cette clé</button>
+      </div>
+      <div class="p-res" id="pr-claude"></div></div>
+      <div class="pr"><label>Modèle</label><div class="pw"><select id="p-cm"><option value="claude-sonnet-4-6">Sonnet 4 (recommandé)</option><option value="claude-haiku-4-5-20251001">Haiku 4.5 (rapide)</option><option value="claude-opus-4-6">Opus 4 (puissant)</option></select></div></div>
     </div>
     <div class="ps"><div class="ps-title">🧠 OpenAI</div>
-      <div class="pr"><label>Clé API OpenAI</label><div class="pw"><input type="password" id="p-openai" placeholder="sk-proj-..."><button class="eye" onclick="tEye('p-openai')">👁</button></div><button class="p-test" onclick="testOpenAI()">⚡ Tester</button><div class="p-res" id="pr-openai"></div></div>
+      <div class="pr"><label>Clé API OpenAI</label><div class="pw"><input type="password" id="p-openai" placeholder="sk-proj-..."><button class="eye" onclick="tEye('p-openai')">👁</button></div>
+      <div style="display:flex;gap:6px;margin-top:6px">
+        <button class="p-test" onclick="testOpenAI()">⚡ Tester</button>
+        <button class="p-test" style="background:var(--accent);color:#fff;border-color:var(--accent)" onclick="saveKey('openai','p-openai','Clé OpenAI')">💾 Sauver</button>
+      </div>
+      <div class="p-res" id="pr-openai"></div></div>
       <div class="pr"><label>Modèle</label><div class="pw"><select id="p-om"><option value="gpt-4o">GPT-4o</option><option value="gpt-4o-mini">GPT-4o Mini</option></select></div></div>
     </div>
     <div class="ps"><div class="ps-title">⚙️ Make</div>
-      <div class="pr"><label>Clé API Make</label><div class="pw"><input type="password" id="p-make" placeholder="Settings → API dans Make"><button class="eye" onclick="tEye('p-make')">👁</button></div></div>
+      <div class="pr"><label>Clé API Make</label><div class="pw"><input type="password" id="p-make" placeholder="Settings → API dans Make"><button class="eye" onclick="tEye('p-make')">👁</button></div>
+      <button class="p-test" style="background:var(--accent);color:#fff;border-color:var(--accent);margin-top:6px" onclick="saveKey('make','p-make','Clé Make')">💾 Sauver cette clé</button></div>
       <div class="pr"><label>Région</label><div class="pw"><select id="p-mreg"><option value="eu1">Europe (eu1)</option><option value="us1">USA (us1)</option></select></div></div>
       <div class="pr"><label>Team ID</label><div class="pw"><input type="text" id="p-mteam" placeholder="Optionnel"></div></div>
     </div>
     <div class="ps"><div class="ps-title">🗄️ Airtable</div>
-      <div class="pr"><label>Personal Access Token</label><div class="pw"><input type="password" id="p-at" placeholder="patXXXXX (Developer hub)"><button class="eye" onclick="tEye('p-at')">👁</button></div><button class="p-test" onclick="testAirtable()">⚡ Tester</button><div class="p-res" id="pr-at"></div></div>
+      <div class="pr"><label>Personal Access Token</label><div class="pw"><input type="password" id="p-at" placeholder="patXXXXX (Developer hub)"><button class="eye" onclick="tEye('p-at')">👁</button></div>
+      <div style="display:flex;gap:6px;margin-top:6px">
+        <button class="p-test" onclick="testAirtable()">⚡ Tester</button>
+        <button class="p-test" style="background:var(--accent);color:#fff;border-color:var(--accent)" onclick="saveKey('at','p-at','Token Airtable')">💾 Sauver</button>
+      </div>
+      <div class="p-res" id="pr-at"></div></div>
     </div>
     <div class="ps"><div class="ps-title">🎨 Softr</div>
-      <div class="pr"><label>Clé API Softr</label><div class="pw"><input type="password" id="p-sf" placeholder="Settings → API Keys"><button class="eye" onclick="tEye('p-sf')">👁</button></div></div>
+      <div class="pr"><label>Clé API Softr</label><div class="pw"><input type="password" id="p-sf" placeholder="Settings → API Keys"><button class="eye" onclick="tEye('p-sf')">👁</button></div>
+      <button class="p-test" style="background:var(--accent);color:#fff;border-color:var(--accent);margin-top:6px" onclick="saveKey('sf','p-sf','Clé Softr')">💾 Sauver cette clé</button></div>
       <div class="pr"><label>Domaine</label><div class="pw"><input type="text" id="p-sfd" placeholder="mon-app.softr.app"></div></div>
     </div>
     <div class="ps"><div class="ps-title">🎮 Préférences</div>
@@ -579,11 +596,17 @@ function saveS() { localStorage.setItem(SK, JSON.stringify(saves)); }
 // PARAMS
 // ════════════════════════════════════════════════════
 function loadParamsIntoForm() {
-  const set = (id, val) => { const el = document.getElementById(id); if (el && val) el.value = val.startsWith('sk-') || val.startsWith('pat') ? '●'.repeat(18) : val; };
-  set('p-claude', P.claude); set('p-openai', P.openai);
-  set('p-make', P.make); set('p-at', P.at);
-  set('p-sf', P.sf); set('p-sfd', P.softrDomain);
-  set('p-mteam', P.makeTeam);
+  P = getP(); // toujours recharger depuis localStorage
+  // Champs secrets : on vide le champ si déjà configuré (placeholder indique l'état)
+  const setSecret = (id, val) => {
+    const el = document.getElementById(id); if (!el) return;
+    el.value = ''; // toujours vide à l'ouverture
+    el.placeholder = val ? '✅ Clé enregistrée — colle une nouvelle pour changer' : el.placeholder;
+  };
+  const setVal = (id, val) => { const el = document.getElementById(id); if (el && val) el.value = val; };
+  setSecret('p-claude', P.claude); setSecret('p-openai', P.openai);
+  setSecret('p-make', P.make); setSecret('p-at', P.at); setSecret('p-sf', P.sf);
+  setVal('p-sfd', P.softrDomain); setVal('p-mteam', P.makeTeam);
   if (P.claudeModel) { const el = document.getElementById('p-cm'); if (el) el.value = P.claudeModel; }
   if (P.openaiModel) { const el = document.getElementById('p-om'); if (el) el.value = P.openaiModel; }
   if (P.makeRegion) { const el = document.getElementById('p-mreg'); if (el) el.value = P.makeRegion; }
@@ -592,24 +615,53 @@ function loadParamsIntoForm() {
   updateConnBadges();
 }
 
+// Sauvegarder une clé individuelle directement
+function saveKey(storageKey, fieldId, label) {
+  try {
+    const el = document.getElementById(fieldId);
+    const val = el ? el.value.trim() : '';
+    if (!val) { alert('⚠️ Le champ est vide !'); return; }
+    const current = JSON.parse(localStorage.getItem(PK) || '{}');
+    current[storageKey] = val;
+    localStorage.setItem(PK, JSON.stringify(current));
+    P = current;
+    if (el) { el.value = ''; el.placeholder = '✅ ' + label + ' enregistré'; }
+    updateConnBadges();
+    showToastSaved(label + ' enregistré ✓');
+  } catch(e) { alert('Erreur: ' + e.message); }
+}
+
+function showToastSaved(msg) {
+  let t = document.getElementById('save-toast');
+  if (!t) { t = document.createElement('div'); t.id = 'save-toast'; t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#00d9c0;color:#000;font-family:Nunito,sans-serif;font-weight:800;font-size:13px;padding:12px 20px;border-radius:10px;z-index:99999;transition:all .3s'; document.body.appendChild(t); }
+  t.textContent = '✅ ' + msg;
+  t.style.opacity = '1'; t.style.transform = 'translateY(0)';
+  setTimeout(() => { t.style.opacity = '0'; }, 2500);
+}
+
 function saveParams() {
-  const getRaw = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
-  const getOrKeep = (id, key) => { const v = getRaw(id); return (v && !v.startsWith('●')) ? v : (P[key] || ''); };
-  P.claude = getOrKeep('p-claude', 'claude');
-  P.claudeModel = getRaw('p-cm') || P.claudeModel || 'claude-sonnet-4-20250514';
-  P.openai = getOrKeep('p-openai', 'openai');
-  P.openaiModel = getRaw('p-om') || P.openaiModel || 'gpt-4o';
-  P.make = getOrKeep('p-make', 'make');
-  P.makeRegion = getRaw('p-mreg') || P.makeRegion || 'eu1';
-  P.makeTeam = getRaw('p-mteam') || P.makeTeam || '';
-  P.at = getOrKeep('p-at', 'at');
-  P.sf = getOrKeep('p-sf', 'sf');
-  P.softrDomain = getRaw('p-sfd') || P.softrDomain || '';
-  P.name = getRaw('p-name') || P.name || '';
-  P.level = getRaw('p-lvl') || P.level || 'zero';
-  saveP();
-  updateConnBadges();
-  alert('✅ Paramètres enregistrés ! Disponibles dans toutes les formations.');
+  try {
+    const current = JSON.parse(localStorage.getItem(PK) || '{}');
+    const g = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+    // Clés secrètes : sauver seulement si le champ n'est pas vide
+    if (g('p-claude'))  current.claude  = g('p-claude');
+    if (g('p-openai'))  current.openai  = g('p-openai');
+    if (g('p-make'))    current.make    = g('p-make');
+    if (g('p-at'))      current.at      = g('p-at');
+    if (g('p-sf'))      current.sf      = g('p-sf');
+    // Toujours sauver les autres
+    if (g('p-cm'))   current.claudeModel = g('p-cm');
+    if (g('p-om'))   current.openaiModel = g('p-om');
+    if (g('p-mreg')) current.makeRegion  = g('p-mreg');
+    if (g('p-mteam'))current.makeTeam    = g('p-mteam');
+    if (g('p-sfd'))  current.softrDomain = g('p-sfd');
+    if (g('p-name')) current.name        = g('p-name');
+    if (g('p-lvl'))  current.level       = g('p-lvl');
+    localStorage.setItem(PK, JSON.stringify(current));
+    P = current;
+    updateConnBadges();
+    showToastSaved('Paramètres enregistrés !');
+  } catch(e) { alert('Erreur sauvegarde: ' + e.message); }
 }
 
 function updateConnBadges() {
@@ -699,7 +751,19 @@ function updateProgressBars(prefix) {
 // ════════════════════════════════════════════════════
 // LESSON GENERATION — via Claude API
 // ════════════════════════════════════════════════════
+// Cache des leçons générées — jamais régénérées deux fois
+const LESSON_CACHE_KEY = 'alex_lesson_cache';
+function getLessonCache() { try { return JSON.parse(localStorage.getItem(LESSON_CACHE_KEY) || '{}'); } catch { return {}; } }
+function setLessonCache(key, html) { try { const c = getLessonCache(); c[key] = html; localStorage.setItem(LESSON_CACHE_KEY, JSON.stringify(c)); } catch {} }
+
 async function generateLesson(tool, lessonTitle, lessonObj, lessonNum, isExam, isIA, modTitle) {
+  // Vérifier le cache d'abord
+  const cacheKey = tool + '_' + lessonNum + '_' + lessonTitle.substring(0,20);
+  const cache = getLessonCache();
+  if (cache[cacheKey]) {
+    console.log('Leçon chargée depuis le cache:', cacheKey);
+    return cache[cacheKey];
+  }
   const key = P.claude;
   if (!key) return '<div class="errbub">🔑 Configure ta clé Claude dans <strong>⚙️ Params</strong> pour générer les leçons.</div>';
 
@@ -806,14 +870,16 @@ GÉNÈRE une vraie question pertinente sur "${lessonTitle}" avec 4 vraies option
 REMPLACE tous les [placeholders] par du vrai contenu détaillé sur "${lessonTitle}" dans ${toolName}.
 SOIS PRÉCIS, CONCRET, TECHNIQUE mais accessible à un ado de 16 ans.`;
 
-  const r = await callClaude(prompt, `Tu es un formateur expert ${toolName} qui génère des leçons HTML complètes et précises.`);
+  const r = await callClaude(prompt, `Tu es un formateur expert ${toolName} qui génère des leçons HTML complètes et précises.`, 'claude-haiku-4-5-20251001');
+  if (r && !r.includes('errbub')) setLessonCache(cacheKey, r);
   return r;
 }
 
-async function callClaude(userMsg, sysMsg) {
+async function callClaude(userMsg, sysMsg, forceModel) {
   const key = P.claude;
   if (!key) return '<div class="errbub">🔑 Clé Claude manquante dans les paramètres.</div>';
-  const model = P.claudeModel || 'claude-sonnet-4-20250514';
+  // Haiku pour les leçons (moins cher), Sonnet pour le chat
+  const model = forceModel || P.claudeModel || 'claude-sonnet-4-6';
   try {
     const r = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -937,7 +1003,7 @@ async function sendChat(toolName) {
   setLoad(true);
   const tid = showTyping();
   try {
-    const model = P.claudeModel || 'claude-sonnet-4-20250514';
+    const model = P.claudeModel || 'claude-sonnet-4-6';
     const r = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': P.claude, 'anthropic-version': '2023-06-01' },
