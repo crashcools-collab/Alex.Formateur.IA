@@ -1,0 +1,336 @@
+[diagnostic.html](https://github.com/user-attachments/files/27285988/diagnostic.html)
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alex — Diagnostic & Réparation des clés</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0d0d1a;color:#e8e8ff;font-family:'Nunito',sans-serif;min-height:100vh;padding:30px 20px;}
+.container{max-width:760px;margin:0 auto;}
+h1{font-size:24px;font-weight:900;margin-bottom:8px;}
+h1 span{color:#6c63ff;}
+.sub{font-size:13px;color:#7878aa;margin-bottom:30px;}
+.section{background:#13132a;border:1px solid #2e2e5a;border-radius:14px;padding:22px;margin-bottom:18px;}
+.section h2{font-size:15px;font-weight:900;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+
+/* État actuel */
+.state-box{background:#1a1a35;border:1px solid #2e2e5a;border-radius:9px;padding:14px;font-family:'Space Mono',monospace;font-size:11px;line-height:1.8;margin-bottom:14px;}
+.state-line{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #2e2e5a;}
+.state-line:last-child{border-bottom:none;}
+.state-name{color:#7878aa;}
+.state-val{font-weight:700;}
+.state-val.ok{color:#00d9c0;}
+.state-val.no{color:#ff6b9d;}
+
+/* Saisie clés */
+.key-row{margin-bottom:18px;}
+.key-row label{display:block;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#7878aa;margin-bottom:6px;}
+.key-input-wrap{display:flex;gap:8px;}
+.key-input-wrap input{flex:1;background:#0d0d1a;border:1px solid #2e2e5a;color:#e8e8ff;font-family:'Space Mono',monospace;font-size:12px;padding:10px 14px;border-radius:8px;outline:none;transition:border-color .2s;}
+.key-input-wrap input:focus{border-color:#6c63ff;}
+.key-input-wrap input::placeholder{color:#7878aa;}
+.btn{padding:10px 16px;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;cursor:pointer;border:none;transition:all .2s;white-space:nowrap;}
+.btn-save{background:#6c63ff;color:#fff;}
+.btn-save:hover{background:#5a51e8;}
+.btn-test{background:#1a1a35;color:#00d9c0;border:1px solid #00d9c0;}
+.btn-test:hover{background:rgba(0,217,192,.1);}
+.btn-clear{background:#1a1a35;color:#ff6b9d;border:1px solid #ff6b9d;}
+.btn-clear:hover{background:rgba(255,107,157,.1);}
+.key-result{margin-top:8px;font-size:11px;font-weight:700;padding:6px 10px;border-radius:6px;display:none;}
+.key-result.show{display:block;}
+.key-result.ok{background:rgba(0,217,192,.1);color:#00d9c0;}
+.key-result.no{background:rgba(255,107,157,.1);color:#ff6b9d;}
+
+/* Actions globales */
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
+
+.note{background:rgba(255,209,102,.08);border:1px solid rgba(255,209,102,.25);border-radius:9px;padding:12px 15px;font-size:12px;line-height:1.7;color:#e8c87a;margin-bottom:18px;}
+
+a.go-back{display:inline-block;margin-bottom:18px;color:#6c63ff;text-decoration:none;font-weight:700;font-size:12px;}
+a.go-back:hover{text-decoration:underline;}
+
+.toast{position:fixed;bottom:24px;right:24px;background:#00d9c0;color:#000;font-weight:800;font-size:13px;padding:12px 20px;border-radius:10px;z-index:99999;opacity:0;transition:opacity .3s;}
+.toast.show{opacity:1;}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<a href="index.html" class="go-back">← Retour au Hub</a>
+
+<h1>🔧 Diagnostic <span>& Réparation</span></h1>
+<p class="sub">Vérifie et répare tes clés API. Cette page ne peut pas échouer.</p>
+
+<div class="note">
+  ⚠️ <strong>Si tu es ici c'est que tes clés ont disparu.</strong> Cause probable : le navigateur a vidé le localStorage, ou conflit avec une ancienne version. Re-saisis tes clés ci-dessous, elles seront stockées définitivement.
+</div>
+
+<!-- ÉTAT ACTUEL -->
+<div class="section">
+  <h2>📊 État actuel du stockage</h2>
+  <div class="state-box" id="stateBox"></div>
+  <button class="btn btn-test" onclick="refreshState()">🔄 Rafraîchir</button>
+</div>
+
+<!-- CLAUDE -->
+<div class="section">
+  <h2>🤖 Clé API Claude (Anthropic)</h2>
+  <div class="key-row">
+    <label>Saisis ta clé Claude</label>
+    <div class="key-input-wrap">
+      <input type="text" id="k-claude" placeholder="sk-ant-api03-...">
+      <button class="btn btn-save" onclick="saveK('claude')">💾 Sauvegarder</button>
+      <button class="btn btn-test" onclick="testK('claude')">⚡ Tester</button>
+    </div>
+    <div class="key-result" id="r-claude"></div>
+  </div>
+</div>
+
+<!-- OPENAI -->
+<div class="section">
+  <h2>🧠 Clé API OpenAI</h2>
+  <div class="key-row">
+    <label>Saisis ta clé OpenAI</label>
+    <div class="key-input-wrap">
+      <input type="text" id="k-openai" placeholder="sk-proj-...">
+      <button class="btn btn-save" onclick="saveK('openai')">💾 Sauvegarder</button>
+      <button class="btn btn-test" onclick="testK('openai')">⚡ Tester</button>
+    </div>
+    <div class="key-result" id="r-openai"></div>
+  </div>
+</div>
+
+<!-- AIRTABLE -->
+<div class="section">
+  <h2>🗄️ Token Airtable</h2>
+  <div class="key-row">
+    <label>Saisis ton Personal Access Token</label>
+    <div class="key-input-wrap">
+      <input type="text" id="k-at" placeholder="patXXXXX...">
+      <button class="btn btn-save" onclick="saveK('at')">💾 Sauvegarder</button>
+      <button class="btn btn-test" onclick="testK('at')">⚡ Tester</button>
+    </div>
+    <div class="key-result" id="r-at"></div>
+  </div>
+</div>
+
+<!-- MAKE -->
+<div class="section">
+  <h2>⚙️ Clé API Make</h2>
+  <div class="key-row">
+    <label>Saisis ta clé Make</label>
+    <div class="key-input-wrap">
+      <input type="text" id="k-make" placeholder="Clé Make...">
+      <button class="btn btn-save" onclick="saveK('make')">💾 Sauvegarder</button>
+    </div>
+    <div class="key-result" id="r-make"></div>
+  </div>
+</div>
+
+<!-- SOFTR -->
+<div class="section">
+  <h2>🎨 Clé API Softr</h2>
+  <div class="key-row">
+    <label>Saisis ta clé Softr</label>
+    <div class="key-input-wrap">
+      <input type="text" id="k-sf" placeholder="Clé Softr...">
+      <button class="btn btn-save" onclick="saveK('sf')">💾 Sauvegarder</button>
+    </div>
+    <div class="key-result" id="r-sf"></div>
+  </div>
+</div>
+
+<!-- ZONE DANGER -->
+<div class="section">
+  <h2>🚨 Zone danger</h2>
+  <p style="font-size:12px;color:#7878aa;margin-bottom:12px;">Si rien ne marche, vide tout et recommence proprement.</p>
+  <div class="acts">
+    <button class="btn btn-clear" onclick="clearAll()">🗑 Tout effacer (clés + progression)</button>
+    <button class="btn btn-clear" onclick="clearKeys()">🔑 Effacer uniquement les clés</button>
+    <button class="btn btn-test" onclick="exportData()">⬇ Exporter mes données</button>
+  </div>
+</div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const PK = 'alex_params';
+
+function getP() {
+  try { return JSON.parse(localStorage.getItem(PK) || '{}'); }
+  catch(e) { console.error(e); return {}; }
+}
+
+function saveP(p) {
+  try { localStorage.setItem(PK, JSON.stringify(p)); return true; }
+  catch(e) { alert('Erreur sauvegarde: ' + e.message); return false; }
+}
+
+function toast(msg, color) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = color || '#00d9c0';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function mask(v) {
+  if (!v) return '(vide)';
+  if (v.length < 12) return v;
+  return v.substring(0, 8) + '...' + v.substring(v.length - 4) + ' (' + v.length + ' caractères)';
+}
+
+function refreshState() {
+  const p = getP();
+  const box = document.getElementById('stateBox');
+  const items = [
+    ['🤖 Clé Claude', p.claude],
+    ['🧠 Clé OpenAI', p.openai],
+    ['🗄️ Token Airtable', p.at],
+    ['⚙️ Clé Make', p.make],
+    ['🎨 Clé Softr', p.sf],
+    ['👤 Prénom', p.name],
+    ['📊 Niveau', p.level],
+  ];
+  box.innerHTML = items.map(([n, v]) =>
+    `<div class="state-line"><span class="state-name">${n}</span><span class="state-val ${v ? 'ok' : 'no'}">${v ? '✅ ' + mask(v) : '❌ Non configuré'}</span></div>`
+  ).join('');
+}
+
+function saveK(name) {
+  const id = 'k-' + name;
+  const v = document.getElementById(id).value.trim();
+  if (!v) {
+    showRes(name, false, 'Le champ est vide');
+    return;
+  }
+  const p = getP();
+  p[name] = v;
+  if (saveP(p)) {
+    document.getElementById(id).value = '';
+    showRes(name, true, '✅ Sauvegardé ! (' + v.length + ' caractères)');
+    toast('Clé ' + name + ' sauvegardée');
+    refreshState();
+  } else {
+    showRes(name, false, 'Échec de la sauvegarde');
+  }
+}
+
+async function testK(name) {
+  const fieldVal = document.getElementById('k-' + name).value.trim();
+  const stored = getP()[name] || '';
+  const key = fieldVal || stored;
+  if (!key) {
+    showRes(name, false, 'Aucune clé à tester');
+    return;
+  }
+  showRes(name, null, '⏳ Test...');
+
+  try {
+    if (name === 'claude') {
+      const r = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': key,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 5, messages: [{ role: 'user', content: 'Hi' }] })
+      });
+      if (r.ok) {
+        // Auto-save si pas déjà stocké
+        if (fieldVal && fieldVal !== stored) {
+          const p = getP(); p.claude = fieldVal; saveP(p);
+          document.getElementById('k-claude').value = '';
+          refreshState();
+        }
+        showRes(name, true, '✅ Clé Claude valide ' + (fieldVal ? '— sauvegardée auto !' : '— déjà stockée'));
+      } else {
+        const e = await r.json().catch(() => ({}));
+        showRes(name, false, '❌ Invalide : ' + (e?.error?.message || 'Erreur ' + r.status));
+      }
+    } else if (name === 'at') {
+      const r = await fetch('https://api.airtable.com/v0/meta/bases', {
+        headers: { 'Authorization': 'Bearer ' + key }
+      });
+      if (r.ok) {
+        const d = await r.json();
+        if (fieldVal && fieldVal !== stored) {
+          const p = getP(); p.at = fieldVal; saveP(p);
+          document.getElementById('k-at').value = '';
+          refreshState();
+        }
+        showRes(name, true, '✅ ' + (d.bases?.length || 0) + ' base(s) trouvée(s)' + (fieldVal ? ' — sauvegardé auto !' : ''));
+      } else {
+        showRes(name, false, '❌ Token invalide');
+      }
+    } else if (name === 'openai') {
+      const r = await fetch('https://api.openai.com/v1/models', {
+        headers: { 'Authorization': 'Bearer ' + key }
+      });
+      if (r.ok) {
+        if (fieldVal && fieldVal !== stored) {
+          const p = getP(); p.openai = fieldVal; saveP(p);
+          document.getElementById('k-openai').value = '';
+          refreshState();
+        }
+        showRes(name, true, '✅ Clé OpenAI valide' + (fieldVal ? ' — sauvegardée auto !' : ''));
+      } else {
+        showRes(name, false, '❌ Invalide');
+      }
+    }
+  } catch (e) {
+    showRes(name, false, '❌ Erreur réseau : ' + e.message);
+  }
+}
+
+function showRes(name, ok, msg) {
+  const el = document.getElementById('r-' + name);
+  el.className = 'key-result show ' + (ok === true ? 'ok' : ok === false ? 'no' : '');
+  el.textContent = msg;
+}
+
+function clearAll() {
+  if (!confirm('Effacer toutes les données (clés API + progression) ?')) return;
+  localStorage.removeItem(PK);
+  localStorage.removeItem('alex_done');
+  localStorage.removeItem('alex_saves');
+  localStorage.removeItem('alex_lesson_cache');
+  refreshState();
+  toast('Tout effacé', '#ff6b9d');
+}
+
+function clearKeys() {
+  if (!confirm('Effacer uniquement les clés API ?')) return;
+  const p = getP();
+  delete p.claude; delete p.openai; delete p.make; delete p.at; delete p.sf;
+  saveP(p);
+  refreshState();
+  toast('Clés effacées', '#ff6b9d');
+}
+
+function exportData() {
+  const data = {
+    params: getP(),
+    done: JSON.parse(localStorage.getItem('alex_done') || '[]'),
+    saves: JSON.parse(localStorage.getItem('alex_saves') || '[]'),
+    cacheKeys: Object.keys(JSON.parse(localStorage.getItem('alex_lesson_cache') || '{}'))
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'alex-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+  a.click();
+}
+
+// Init
+refreshState();
+</script>
+</body>
+</html>
